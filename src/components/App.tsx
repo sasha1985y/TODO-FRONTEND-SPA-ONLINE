@@ -9,7 +9,7 @@ function App() {
   const [name, setName] = useState("")
   const [editStatus, setEditStatus] = useState(false)
   const [editName, setEditName] = useState('')
-  const [editTodo, setEditTodo] = useState({}); 
+  const [editTodo, setEditTodo] = useState<Todo | null>(null); 
   const [openEditUI, setOpenEditUI] = useState(false)
 
   const addTodoHandler = (): void => {
@@ -24,14 +24,11 @@ function App() {
     postTodo()
   }
 
-  const editTodoHandler = (id: number) => {
+  const editTodoHandler = (todo: Todo) => {
     const updatePatchTodo = async () => {
-      const updateData = {
-        name: editName,
-        status: editStatus,
-      }
-
-      const {data} = await axios.patch(`https://cd80175.tw1.ru/todos/${id}/`, updateData)
+      const { id, ...updateData } = todo;
+      await axios.patch(`https://cd80175.tw1.ru/todos/${id}/`, updateData);
+      // Ваши обновления...
       const updatedTodos = todos.map((todo) => {
         if(todo.id === id) {
           todo.name = editName;
@@ -40,12 +37,12 @@ function App() {
         return todo
       })
       setTodos(updatedTodos)
-      setEditTodo({})
+      setEditTodo(todo)
       setEditName('')
       setEditStatus(false)
       setOpenEditUI(false)
-    }
-    updatePatchTodo()
+    };
+    updatePatchTodo();
   };
   
 
@@ -133,7 +130,7 @@ function App() {
                 <textarea className="form-control" maxLength={200} value={editName} onChange={(e) => setEditName(e.target.value)}></textarea>
               </li>
               <li>
-                <button onClick={() => editTodoHandler(editTodo.id)} className="btn btn-success">Update</button>
+              <button onClick={() => editTodo && editTodoHandler(editTodo)} className="btn btn-success">Update</button>
               </li>
             </ul>
             <div className="col-md-2"></div>
