@@ -73,23 +73,23 @@ function App() {
           type="text"
           id="myInput" 
           maxLength={200}
-          className="w-75 bg-body-secondary rounded-start-pill"
+          className={`w-75 bg-body-secondary ${name.trim() === "" ? "rounded-pill" : "rounded-start-pill"}`}
           placeholder="Add todo here..."
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
-        <div onClick={addTodoHandler} className="w-20 bg-body-secondary rounded-end-pill border border-dark-subtle border-3">
+        <div onClick={addTodoHandler} className={`w-20 bg-body-secondary rounded-end-pill border border-dark-subtle border-3 ${name.trim() === "" ? "invisible" : ""}`}>
           <i className="text-success fa-solid fa-square-plus"></i>
         </div>
       </div>
       <div className="h-5 d-inline-block"></div>
       <div className="row">
         <div className="col-md-1"></div>
-        <ol className="col d-inline-block">
+        <ul className="col d-inline-block list-group">
           {todos?.map((todo: Todo) => {
-            const chunkedName = todo.name.match(/.{1,49}/g); // Разбиваем строку на части по 20 символов
+            const chunkedName = todo.name.match(/.{1,49}/g);
             return (
-              <li key={todo.id} className="col bg-secondary-subtle mb-1 rounded-4">
+              <li key={todo.id} className="col bg-secondary-subtle mb-1 rounded-4 list-group-item">
                 <p className="text-center" onClick={() => {
                   setEditStatus(todo.status)
                   setEditName(todo.name)
@@ -113,22 +113,22 @@ function App() {
             </li>
             );
           })}
-        </ol>
+        </ul>
         <div className="col-md-4">
           <div className={`position-fixed row h-15 w-20 bg-secondary ${openEditUI ? "" : "invisible"}`}>
             <div className="col-md-2"></div>
             <ul className="col bg-body-secondary rounded-4">
               <li className="d-flex justify-content-around hstack gap-2">
-                <span className="fs-6">Editor</span>
+                <span className="fs-6">Редактор</span>
                 < input type="checkbox" checked={editStatus} onChange={() => setEditStatus(!editStatus)}/>
-                <i>status</i>
+                <i>статус</i>
                 <i onClick={() => setOpenEditUI(false)} className="text-danger fs-5 fa-solid fa-xmark"></i>
               </li>
               <li className="input-group">
                 <textarea className="form-control" maxLength={200} value={editName} onChange={(e) => setEditName(e.target.value)}></textarea>
               </li>
               <li>
-              <button onClick={() => editTodo && editTodoHandler(editTodo)} className="btn btn-success">Update</button>
+              <button onClick={() => editTodo && editTodoHandler(editTodo)} className="btn btn-success">обновить</button>
               </li>
             </ul>
             <div className="col-md-2"></div>
