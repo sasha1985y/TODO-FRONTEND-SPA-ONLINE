@@ -87,7 +87,7 @@ function App() {
         <div className="col-md-1"></div>
         <ol className="col d-inline-block">
           {todos?.map((todo: Todo) => {
-            const chunkedName = todo.name.match(/.{1,50}/g); // Разбиваем строку на части по 20 символов
+            const chunkedName = todo.name.match(/.{1,49}/g); // Разбиваем строку на части по 20 символов
             return (
               <li key={todo.id} className="col bg-secondary-subtle mb-1 rounded-4">
                 <p className="text-center" onClick={() => {
@@ -100,19 +100,17 @@ function App() {
                     {chunkedName && chunkedName.map((chunk, chunkIndex) => (
                       <span key={chunkIndex}>
                         {chunk}
-                        {chunkIndex < chunkedName.length - 1 && <br />} {/* Добавляем <br> между частями */}
+                        {chunkIndex < chunkedName.length - 1 && <i>&#8211;<br></br></i>}
                       </span>
                     ))}
                   </div>
                 </p>
                 {" "}
-                {todo.status && (
-                  <div className="text-center position-relative">
-                    <span className="text-light-emphasis">(Completed)</span>
-                    <i onClick={() => deleteTodoHandler(todo.id)} className="text-danger fs-3 position-absolute bottom-0 end-0 fa-regular fa-trash-can"></i>
-                  </div>
-                )}
-              </li>
+                <div className="row">
+                  <span className="col-md-7 text-end text-light-emphasis">{todo.status ? "выполнена" : "не выполнена"}</span>
+                  <i onClick={() => deleteTodoHandler(todo.id)} className="col-md-5 text-end text-danger fs-3 bottom-0 end-0 fa-regular fa-trash-can"></i>
+                </div>
+            </li>
             );
           })}
         </ol>
