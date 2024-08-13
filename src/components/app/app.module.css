@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik+Marker+Hatch&display=swap');
+
+.app_h1 {
+    font-family: "Rubik Marker Hatch", cursive, "Arial", "Helvetica Neue", "Helvetica", sans-serif;
+}
+
+.app_background_window {
+    background-image: url('../../../public/window.gif');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.app_background_sky {
+    background-image: url('../../../public/sky.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.applogo {
+    background-image: url('../../../public/logo.svg');
+    background-repeat: no-repeat;
+    width: 100px;
+    height: 100px;
+    transition: all 1.5s;
+}
+  
+.applogo:hover {
+    transition: all 2s;
+    -webkit-transform: scale(1.5) rotate(1440deg);
+    -ms-transform: scale(1.5) rotate(1440deg);
+    transform: scale(1.5) rotate(1440deg);
+}
