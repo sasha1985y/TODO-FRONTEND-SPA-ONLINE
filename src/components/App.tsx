@@ -24,25 +24,35 @@ function App() {
     postTodo()
   }
 
-  const editTodoHandler = (todo: Todo) => {
-    const updatePatchTodo = async () => {
-      const { id, ...updateData } = todo;
-      await axios.patch(`https://cd80175.tw1.ru/todos/${id}/`, updateData)
-      // Ваши обновления...
-      const updatedTodos = todos.map((todo) => {
-        if(todo.id === id) {
-          todo.name = editName;
-          todo.status = editStatus;
-        }
-        return todo
-      })
-      setTodos(updatedTodos)
-      setEditTodo(todo)
-      setEditName('')
-      setEditStatus(false)
-      setOpenEditUI(false)
-    };
-    updatePatchTodo();
+  const editTodoHandler = async () => {
+    if(editTodo) {
+      const updatedTodo = {
+        ...editTodo,
+        name: editName, // Используем измененное имя
+        status: editStatus, // Используем измененный статус
+      };
+  
+      try {
+        // Отправляем обновленные данные на сервер
+        const { data } = await axios.patch(`https://cd80175.tw1.ru/todos/${editTodo.id}/`, updatedTodo);
+  
+        // Обновляем состояние todos с обновленным todo
+        const updatedTodos = todos.map((todo) => (
+          todo.id === editTodo.id ? data : todo // Предполагается, что сервер возвращает обновленный объект todo
+        ));
+  
+        setTodos(updatedTodos);
+        
+        // Сброс состояний после успешного обновления
+        setEditTodo(null);
+        setEditName('');
+        setEditStatus(false);
+        setOpenEditUI(false);
+      } catch (error) {
+        console.error("Ошибка обновления todo:", error);
+        // Здесь может быть обработка ошибки, например, показ уведомления пользователю
+      }
+    }
   };
   
 
@@ -80,7 +90,7 @@ function App() {
             <textarea className="form-control" maxLength={200} value={editName} onChange={(e) => setEditName(e.target.value)}></textarea>
           </li>
           <li>
-            <button onClick={() => editTodo && editTodoHandler(editTodo)} className="btn btn-success">обновить</button>
+            <button onClick={() => editTodo && editTodoHandler()} className="btn btn-success">обновить</button>
           </li>
         </ul>
         <div className="col-md-2"></div>
